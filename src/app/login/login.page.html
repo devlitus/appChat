@@ -1,9 +1,21 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>login</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title text-center>login</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-img src="/assets/imagenes/logo.png"></ion-img>
+  <form #formLogin="ngForm" (ngSubmit)="login(formLogin)" padding>
+    <ion-item>
+      <ion-input (ngModel)="nombre" name="nombre" placeholder="Nombre"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input (ngModel)="password" name="password" type="password" placeholder="Contraseña"></ion-input>
+    </ion-item>
+    <ion-button expand="full" type="submit">
+      Enviar
+      <ion-icon slot="end" name="send"></ion-icon>
+    </ion-button>
+  </form>
 </ion-content>
