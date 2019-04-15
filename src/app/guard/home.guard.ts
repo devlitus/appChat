@@ -8,12 +8,12 @@ import { LoginService } from '../services/login.service';
 })
 export class HomeGuard implements CanActivate {
 
-  constructor(private _loginService: LoginService, private router: Router) {}
-  
+  constructor(private _loginService: LoginService, private router: Router) { }
+
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if (this._loginService.isNotLogged()){
+    if (this._loginService.isNotLogged()) {
       return true
-    }else {
+    } else {
       this.router.navigate(['/home']);
       return false
     }

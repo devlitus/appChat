@@ -1,0 +1,20 @@
+.container-transmitter {
+  display: grid;
+  grid-template-columns: .5fr;
+  justify-content: start;
+}
+.container-receiver {
+  display: grid;
+  grid-template-columns: .5fr;
+  justify-content: end;
+}
+.transmitter {
+  background: #cccccc;
+  // text-align : left;
+}
+.receiver {
+  min-height: 1.2em;
+  // color: white;
+  background: #5beca9;
+  // text-align: right;
+}

@@ -1,14 +1,16 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>
-      Ionic Blank
+      <h3 text-center>CHAT</h3>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div class="ion-padding">
-    The world is your oyster.
-    <p>If you get lost, the <a target="_blank" rel="noopener" href="https://ionicframework.com/docs/">docs</a> will be your guide.</p>
-  </div>
+  <ion-list lines="inset">
+    <ion-item *ngFor="let usuario of usuarios" (click)="roomChat(usuario.id)">
+      <ion-label>{{usuario.name}}</ion-label>
+      <ion-badge color="primary">11</ion-badge>
+    </ion-item>
+  </ion-list>
 </ion-content>

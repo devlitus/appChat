@@ -18,43 +18,43 @@ export class LoginService {
     private platform: Platform,
     public storage: Storage,
     private router: Router
-    ) { }
+  ) { }
   // login user
   login(user: any): Observable<any> {
     const url = URL_SERVICE + '/login';
     return this.http.post(url, user)
-    .pipe(map((resp: any) => {
-      if (resp.ok) {
-        this.guardarUsuario(resp.user);
-        return resp.user
-      }else {
-        return resp.message;
-      }
-    }))
+      .pipe(map((resp: any) => {
+        if (resp.ok) {
+          this.guardarUsuario(resp.user);
+          return resp.user
+        } else {
+          return resp.message;
+        }
+      }))
   }
   // Almacener usuario en LocalStorage en Web y ionic Storage en movil
   guardarUsuario(user: any) {
-    if(this.platform.is('cordova')) {
+    if (this.platform.is('cordova')) {
       this.storage.set('user', user);
-    }else {
+    } else {
       localStorage.setItem('user', JSON.stringify(user))
       this.router.navigate(['/home']);
     }
   }
 
   // Comprobar si esta Loogged. No permiso al Login
-  isLogged(){
-    let logged = localStorage.key(0); 
+  isLogged() {
+    let logged = localStorage.key(0);
     if (!isNullOrUndefined(logged)) {
       return true;
     }
   }
   // Comprobar si no esta logged. No permiso al Home
-  isNotLogged(){
+  isNotLogged() {
     let logged = localStorage.key(0);
     if (isNullOrUndefined(logged)) {
       return true;
-    } 
+    }
   }
 
 }
