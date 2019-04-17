@@ -3,13 +3,15 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { URL_SERVICE } from 'src/config/config';
+import { Platform } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MensajesService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private platform: Platform, private storage: Storage) { }
   // Obtener todos los mensajes del chat entre dos usuarios
   chat(transmitter: any, receiver: any): Observable<any> {
     const url = URL_SERVICE + '/chat';
@@ -20,41 +22,23 @@ export class MensajesService {
         }
       }));
   }
+  // Obtener todos los mensajes de emisor
+  totalMensajesEmisor(): Observable<any> {
+    const url = URL_SERVICE + '/total_messages_emisor';
+    let currentUser = JSON.parse(localStorage.getItem('user'));
+    return this.http.post(url, currentUser)
+      .pipe(map((res: any) => {
+        if  (res.ok) return res.message;
+      }))
+  }
   enviarMensaje(): Observable<any> {
     return
   }
 
-
-
-
-
-
-
-  /* // Obtener todos los mensajes de qualquier usuario
-  todosMensajes(): Observable<any> {
-    const url = URL_SERVICE + '/mensajes'; 
-    return this.http.get(url)
-    .pipe(map((resp: any) => {
-      if (resp.ok) {
-        return resp;
-      }
-    }));
-  }
-
-  // Obtener los mensajes de un usuario
-  mensjeUsuario(id: any): Observable<any> {
-    const url = URL_SERVICE + `/mensaje?id=${id}`;
-    return this.http.get(url)
-    .pipe(map((resp: any) => {
-      if (resp.ok) {
-        return resp.mensajes;
-      }
-    }))
-  }
-  // Envio de mensajes
-  enviarMensaje(mensaje: any, emisorId: any): Observable<any> {
-    const url = URL_SERVICE + '/mensaje';
-    return this.http.post(url, {emisorId, mensaje})
-    .pipe(map((resp: any) => console.log(resp)));
-  } */
 }
+
+
+
+
+
+

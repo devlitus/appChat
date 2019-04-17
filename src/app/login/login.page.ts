@@ -18,7 +18,7 @@ export class LoginPage implements OnInit {
   login(form: NgForm) {
     if (form.valid) {
       let user = {
-        username: form.value.nombre,
+        name: form.value.nombre,
         password: form.value.password
       }
       this._loginService.login(user)

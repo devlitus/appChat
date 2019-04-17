@@ -36,6 +36,7 @@ export class LoginService {
   guardarUsuario(user: any) {
     if (this.platform.is('cordova')) {
       this.storage.set('user', user);
+      this.router.navigate(['/home']);
     } else {
       localStorage.setItem('user', JSON.stringify(user))
       this.router.navigate(['/home']);
