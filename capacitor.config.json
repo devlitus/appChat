@@ -1,0 +1,6 @@
+{
+  "appId": "com.chatmiki.app",
+  "appName": "appChat",
+  "bundledWebRuntime": false,
+  "webDir": "www"
+}
