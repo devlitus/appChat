@@ -14,7 +14,7 @@ export class RoomChatPage implements OnInit {
   public emisor: any = JSON.parse(localStorage.getItem('user'));
   public receptor: any = this.activateRouter.snapshot.paramMap.get('id');
   public nombre: any = this.activateRouter.snapshot.paramMap.get('nombre');
-  public mensajes: any;
+  public mensajes: any = [];
   constructor(
     public activateRouter: ActivatedRoute,
     public router: Router,
@@ -35,7 +35,12 @@ export class RoomChatPage implements OnInit {
         console.log(resp);
       })
   }
-
+  enviarMensaje(mensaje: string) {
+    if (mensaje !== '') {
+      this.mensajeService.enviarMensaje(this.emisor.id, mensaje, this.receptor)
+        .subscribe(() => this.roomChat());
+    }
+  }
 
 }
 

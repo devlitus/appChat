@@ -23,16 +23,20 @@ export class MensajesService {
       }));
   }
   // Obtener todos los mensajes de emisor
-  totalMensajesEmisor(): Observable<any> {
-    const url = URL_SERVICE + '/total_messages_emisor';
-    let currentUser = JSON.parse(localStorage.getItem('user'));
-    return this.http.post(url, currentUser)
+  mensajeRecivido(): Observable<any> {
+    const url = URL_SERVICE + '/recivido';
+    return this.http.get(url)
       .pipe(map((res: any) => {
-        if  (res.ok) return res.message;
+        if (res.ok) return res.message;
       }))
   }
-  enviarMensaje(): Observable<any> {
-    return
+  // Enviar mensaje
+  enviarMensaje(transmitter: number, message: string, receiver: any, grupo = 1): Observable<any> {
+    const url = URL_SERVICE + '/envio';
+    return this.http.post(url, { transmitter, message, receiver, grupo })
+      .pipe(map((resp) => {
+        console.log(resp);
+      }))
   }
 
 }
