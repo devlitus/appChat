@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subscriber } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { URL_SERVICE } from 'src/config/config';
 import { Platform } from '@ionic/angular';
@@ -10,6 +10,7 @@ import { Storage } from '@ionic/storage';
   providedIn: 'root'
 })
 export class MensajesService {
+  public mensajes: Array<any>;
 
   constructor(private http: HttpClient, private platform: Platform, private storage: Storage) { }
   // Obtener todos los mensajes del chat entre dos usuarios
@@ -18,6 +19,7 @@ export class MensajesService {
     return this.http.post(url, { transmitter, receiver })
       .pipe(map((resp: any) => {
         if (resp.ok) {
+          this.mensajes = resp.messages;
           return resp.messages;
         }
       }));
@@ -35,7 +37,7 @@ export class MensajesService {
     const url = URL_SERVICE + '/envio';
     return this.http.post(url, { transmitter, message, receiver, grupo })
       .pipe(map((resp) => {
-        console.log(resp);
+        console.log("enviar mensaje", resp);
       }))
   }
 
