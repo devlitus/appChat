@@ -10,34 +10,32 @@ import { Storage } from '@ionic/storage';
   providedIn: 'root'
 })
 export class MensajesService {
-  public mensajes: Array<any>;
+  public messages: Array<any> = [];
 
   constructor(private http: HttpClient, private platform: Platform, private storage: Storage) { }
   // Obtener todos los mensajes del chat entre dos usuarios
-  chat(transmitter: any, receiver: any): Observable<any> {
+  getChat(transmitter: any, receiver: any): Observable<any> {
     const url = URL_SERVICE + '/chat';
     return this.http.post(url, { transmitter, receiver })
       .pipe(map((resp: any) => {
         if (resp.ok) {
-          this.mensajes = resp.messages;
+          this.messages = [...resp.messages];
           return resp.messages;
         }
       }));
   }
   // Obtener todos los mensajes de emisor
-  mensajeRecivido(): Observable<any> {
-    const url = URL_SERVICE + '/recivido';
-    return this.http.get(url)
-      .pipe(map((res: any) => {
-        if (res.ok) return res.message;
-      }))
+  mensajeRecivido() {
+    return new Observable(observer => {
+      observer.next(this.messages);
+    })
   }
   // Enviar mensaje
-  enviarMensaje(transmitter: number, message: string, receiver: any, grupo = 1): Observable<any> {
+  sendMessage(transmitter: any, message: string, receiver: any, grupo: number) {
     const url = URL_SERVICE + '/envio';
     return this.http.post(url, { transmitter, message, receiver, grupo })
-      .pipe(map((resp) => {
-        console.log("enviar mensaje", resp);
+      .pipe(map((resp: any) => {
+        // console.log(resp);
       }))
   }
 

@@ -10,7 +10,7 @@ import { Storage } from '@ionic/storage';
   providedIn: 'root'
 })
 export class UsuariosService {
-  public usuarios: any[];
+  public users: any[];
   public device: any;
   constructor(private http: HttpClient, private platform: Platform, public storage: Storage) { }
 
@@ -18,26 +18,17 @@ export class UsuariosService {
   obternerUsuarios(): Observable<any> {
     const url = URL_SERVICE + '/users';
     return this.http.get(url)
-      .pipe(map((resp: any) => {
-        if (resp.ok) {
-          // si es movil
-          if (this.platform.is('cordova')) {
-            this.storage.get('user')
-              .then((value: any) => {
-                this.device = value.device;
-                // console.log("device cordova", value.device);
-              })
-          }
-          // si es web
-          this.usuarios = [...resp.user];
+      .pipe(map((users: any) => {
+        if (users.ok) {
+          this.users = [...users.user];
           let currentUser = JSON.parse(localStorage.getItem('user'));
-          let usuariosActivados = this.usuarios.filter(usuario => {
-            if (usuario.activado != 1 && usuario.id !== currentUser.id) return true
+          let usuariosActivados = this.users.filter(users => {
+            if (users.activado != 1 && users.id !== currentUser.id) return true
           });
           return usuariosActivados
 
         } else {
-          return resp.message;
+          return users.message;
         }
       }));
   }

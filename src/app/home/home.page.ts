@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UsuariosService } from '../services/usuarios.service';
 import { Router } from '@angular/router';
-import { MensajesService } from '../services/mensajes.service';
 import { Plugins } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
@@ -21,7 +20,6 @@ export class HomePage implements OnInit {
 
   constructor(
     private _usuarioService: UsuariosService,
-    private _mensajeService: MensajesService,
     private router: Router,
     public platform: Platform,
     public storage: Storage
@@ -29,12 +27,11 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     this.mostrarUsuarios();
-    console.log('inicio componente');
+    // console.log('inicio componente');
   }
   // se activa al volver a la pagina
   ionViewWillEnter (){
-    this.totalMensajes();
-    console.log('ionViewWillEnter');
+    // console.log('ionViewWillEnter');
   }
   // Obtener todos los usuarios
   mostrarUsuarios() {
@@ -44,67 +41,7 @@ export class HomePage implements OnInit {
       }, error => console.error('Error observable', error)
       );
   }
-  // Obtener los mensajes recividos de los otros usuarios
-  totalMensajes() {
-    this._mensajeService.mensajeRecivido()
-      .subscribe(resp => {
-        if (resp.length !== 0) {
-          this.mensajesRecividos = [...resp]
-          this.storage.set('message', this.mensajesRecividos)
-          // console.log("todos los mensajes", this.mensajesRecividos);
-        }
-      },
-        error => {
-          console.error('Error observable', error);
-        },
-        () => {
-          this.mensajes_recividos();
-        })
-  }
-  mensajes_recividos() {
-    if (this.platform.is('capacitor')) {
-      let mensajeLocal: any;
-      this.storage.get('message')
-      .then(mensaje => {
-        if (mensaje[0].receiver === this.currentUser.id){
-          console.log("enviar notifiacion");
-          this.mensajeLeido = true;
-          if (mensaje[0].id !== this.mensajesRecividos[0].id){
-            console.log('mensaje id y mensaje recivido diferentes');
-            this.totalMensajes();
-          }else {
-            // this.mensajeLeido = false;
-            console.log('mensaje id y mensaje recivido iguales');
-            // this._mensajeService.mensajeRecivido().subscribe()
-          }
-          console.log("mensaje local", mensaje);
-          
-        }else {
-          console.log("no iguales", mensaje);
-        }
-      }) 
-      console.log('mensaje recivido', this.mensajesRecividos);
-      
-    }
-    /* if (localStorage.getItem('message')){
-      let mensaje = JSON.parse(localStorage.getItem('message'));
 
-      console.log('existe messge', mensaje[0].id);
-    }else {
-      console.log('no exist message');
-    } */
-    // si es web
-    /* console.log("envia el mensaje el usuario", this.mensajesRecividos[0].receiver);
-    console.log("recive el mensaje el usuario", this.currentUser.id); */
-    // Buscar si el mensaje recivido es para el usuario actual y no lo he leido
-    /* if (this.currentUser.id === this.mensajesRecividos[0].receiver && !this.mensajeLeido) {
-      console.log("Mostrar notificacion");
-      this.totalMensajes();
-      return this.mensajeLeido = true;
-    } else {
-
-    } */
-  }
   notificacion() {
     LocalNotifications.schedule({
       notifications: [
@@ -123,7 +60,7 @@ export class HomePage implements OnInit {
   }
   // Ir al room chat pasandole el id del usuario que quieres enviarle un mensaje
   roomChat(usuarioId: any, nombre: any) {
-    this.router.navigate(['/room-chat/', usuarioId, nombre]);
+    this.router.navigate(['/chat/', usuarioId, nombre]);
     return this.mensajeLeido = false;
   }
 

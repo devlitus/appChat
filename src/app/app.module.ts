@@ -9,11 +9,12 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicStorageModule } from '@ionic/storage';
 
 import { AppComponent } from './app.component';
+import { ChatRoomComponent } from './components/chat/chat-room.component';
 import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
+  declarations: [AppComponent, ChatRoomComponent],
+  entryComponents: [ChatRoomComponent],
   imports: [
     BrowserModule, 
     IonicModule.forRoot(),
