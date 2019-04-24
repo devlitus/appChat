@@ -23,10 +23,9 @@ export class UsuariosService {
           this.users = [...users.user];
           let currentUser = JSON.parse(localStorage.getItem('user'));
           let usuariosActivados = this.users.filter(users => {
-            if (users.activado != 1 && users.id !== currentUser.id) return true
+            if (users.activado != 1 && users.id !== currentUser.id) return users
           });
           return usuariosActivados
-
         } else {
           return users.message;
         }

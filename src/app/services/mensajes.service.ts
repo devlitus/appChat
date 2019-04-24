@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subscriber } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { URL_SERVICE } from 'src/config/config';
 import { Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { URL_SERVICE } from 'src/config/config';
 
 @Injectable({
   providedIn: 'root'
@@ -26,9 +26,9 @@ export class MensajesService {
   }
   // Obtener todos los mensajes de emisor
   mensajeRecivido() {
-    return new Observable(observer => {
-      observer.next(this.messages);
-    })
+    const url = URL_SERVICE + '/recivido';
+    return this.http.get(url)
+    .pipe(map((message: any) => message.message))
   }
   // Enviar mensaje
   sendMessage(transmitter: any, message: string, receiver: any, grupo: number) {

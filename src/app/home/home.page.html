@@ -1,20 +1,35 @@
 <ion-header>
   <ion-toolbar color="tertiary">
-    <ion-title>
-      <h3 text-center>CHAT</h3>
-    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="currentUser.role === 'admin'" (click)="openMenu()">
+        <ion-icon slot="end" name="menu"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Chat</ion-title>
   </ion-toolbar>
 </ion-header>
-
+<ion-menu side="start" menuId="first">
+  <ion-header>
+    <ion-toolbar color="tertiary">
+      <ion-title>Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-item>Grups</ion-item>
+      <ion-item>Menu Item</ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+<ion-router-outlet main></ion-router-outlet>
 <ion-content>
 
-  <ion-list lines="inset" *ngFor="let usuario of usuarios">
+  <ion-list lines="inset" *ngFor="let usuario of usuarios; let i = index">
     <ion-item (click)="roomChat(usuario.id, usuario.name)">
       <ion-label>{{usuario.name}}</ion-label>
-      <div *ngFor="let mensajesRecivido of mensajesRecividos">
-        <ion-icon name="checkmark"
-          *ngIf="mensajesRecivido.transmitter === usuario.id && mensajesRecivido.receiver === currentUser.id"></ion-icon>
-        <!-- {{mensajesRecivido.total_mensajes}} -->
+      <div >
+        <ion-icon name="checkmark" *ngIf="message === usuario.id && recivido">
+        </ion-icon>
       </div>
     </ion-item>
   </ion-list>

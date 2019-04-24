@@ -6,28 +6,28 @@
     <ion-title>{{nameUser}}</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content>
-    <div id="container" *ngFor="let mensaje of messages">
-        <ng-container *ngIf="mensaje.transmitter === currentUser.id; else receiver">
-          <div class="container-transmitter">
-            <!-- <img [src]="urlImage+'/'+transmitter.img" width="24px"> -->
-            <p class="transmitter">(yo) {{mensaje.message}} </p>
-          </div>
-        </ng-container>
-        <ng-template #receiver>
-          <div class="container-receiver">
-            <!-- <img [src]="urlImage+'/'+urlReciver" width="24px"> -->
-            <p class="receiver">(el otro) {{mensaje.message}} </p>
-          </div>
-        </ng-template>
+<ion-content padding>
+  <div id="container" *ngFor="let mensaje of messages">
+    <ng-container *ngIf="mensaje.transmitter === currentUser.id; else receiver">
+      <div class="container-transmitter">
+        <!-- <img [src]="urlImage+'/'+transmitter.img" width="24px"> -->
+        <p class="transmitter">(yo) {{mensaje.message}} </p>
       </div>
+    </ng-container>
+    <ng-template #receiver>
+      <div class="container-receiver">
+        <!-- <img [src]="urlImage+'/'+urlReciver" width="24px"> -->
+        <p class="receiver">(el otro) {{mensaje.message}} </p>
+      </div>
+    </ng-template>
+  </div>
 </ion-content>
 <ion-footer>
   <ion-toolbar color="tertiary">
     <ion-input #inpMessage type="text" placeholder="Mensaje"></ion-input>
     <ion-buttons slot="end">
       <ion-button (click)="attachmen()">
-          <ion-icon name="attach"></ion-icon>
+        <ion-icon name="attach"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">

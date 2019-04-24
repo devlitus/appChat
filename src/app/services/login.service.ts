@@ -31,16 +31,16 @@ export class LoginService {
           return resp.message;
         }
       }))
-  }
-  // Almacener usuario en LocalStorage en Web y ionic Storage en movil
-  guardarUsuario(user: any) {
-    if (this.platform.is('cordova')) {
+    }
+    // Almacener usuario en LocalStorage en Web y ionic Storage en movil
+    guardarUsuario(user: any) {
+    localStorage.setItem('user', JSON.stringify(user))
+    this.router.navigate(['/home']);
+    /* if (this.platform.is('cordova')) {
       this.storage.set('user', user);
       this.router.navigate(['/home']);
     } else {
-      localStorage.setItem('user', JSON.stringify(user))
-      this.router.navigate(['/home']);
-    }
+    } */
   }
 
   // Comprobar si esta Loogged. No permiso al Login

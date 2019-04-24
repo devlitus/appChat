@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { UsuariosService } from '../services/usuarios.service';
 import { Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
-import { Platform } from '@ionic/angular';
+import { MenuController, Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-
+import { MensajesService } from '../services/mensajes.service';
+import { UsuariosService } from '../services/usuarios.service';
+import { Subscription } from 'rxjs';
+// Plugins Capacitors
 const { LocalNotifications } = Plugins;
 
 @Component({
@@ -15,31 +17,56 @@ const { LocalNotifications } = Plugins;
 export class HomePage implements OnInit {
   public usuarios = [];
   public mensajesRecividos: any;
+  public message: any;
+  public recivido: boolean = true;
   public currentUser = JSON.parse(localStorage.getItem('user'));
-  public mensajeLeido = false;
-
+  public subscription: Subscription;
   constructor(
     private _usuarioService: UsuariosService,
+    private _mensajeService: MensajesService,
     private router: Router,
     public platform: Platform,
-    public storage: Storage
+    public storage: Storage,
+    private menu: MenuController
   ) { }
 
   ngOnInit() {
-    this.mostrarUsuarios();
     // console.log('inicio componente');
   }
   // se activa al volver a la pagina
-  ionViewWillEnter (){
+  ionViewWillEnter() {
+    this.mostrarUsuarios();
+    this.messageReceiver();
+    let message = localStorage.getItem('messageTransmitter');
+    if (message === this.message) {
+      this.recivido = false;
+      localStorage.removeItem('messageTransmitter');
+    };
     // console.log('ionViewWillEnter');
+  }
+  ionViewWillLeave() {
+    this.subscription.unsubscribe();
   }
   // Obtener todos los usuarios
   mostrarUsuarios() {
     this._usuarioService.obternerUsuarios()
       .subscribe(usuarios => {
+        // console.log(this.currentUser);
         this.usuarios = usuarios;
-      }, error => console.error('Error observable', error)
+      },
+        error => console.error('Error observable', error),
+        () => console.log('completo usuarios')
       );
+  }
+  messageReceiver() {
+    this.subscription = this._mensajeService.mensajeRecivido()
+      .subscribe(
+        message => {
+          this.message = message[0].transmitter;
+          localStorage.setItem('messageTransmitter', message[0].transmitter);
+        },
+        error => console.error("Error en obs mensaje recivido", error),
+        () => console.log("completado"));
   }
 
   notificacion() {
@@ -61,7 +88,11 @@ export class HomePage implements OnInit {
   // Ir al room chat pasandole el id del usuario que quieres enviarle un mensaje
   roomChat(usuarioId: any, nombre: any) {
     this.router.navigate(['/chat/', usuarioId, nombre]);
-    return this.mensajeLeido = false;
+  }
+  // Open Menu
+  openMenu() {
+    this.menu.enable(true, 'first');
+    this.menu.open('first');
   }
 
 }

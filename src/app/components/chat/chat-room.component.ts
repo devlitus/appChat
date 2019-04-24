@@ -3,6 +3,7 @@ import { MensajesService } from 'src/app/services/mensajes.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { IonInput } from '@ionic/angular';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chat-room',
@@ -21,18 +22,16 @@ export class ChatRoomComponent implements OnInit {
   constructor(private _service: MensajesService, public activateRouter: ActivatedRoute) { }
 
   ngOnInit() {
-
-  }
-  ionViewWillEnter() {
-    this.showChat();
     this.interval = setInterval(() => {
-      this.contador++
       this.showChat();
+      this.contador++
       if (this.contador === 1000) {
         clearInterval(this.interval)
       }
-    }, 3000)
-
+    }, 3000);
+  }
+  ionViewWillEnter() {
+    this.showChat();
   }
   ionViewWillLeave() {
     this.subscription.unsubscribe();
@@ -42,13 +41,19 @@ export class ChatRoomComponent implements OnInit {
   showChat() {
     this.subscription = this._service.getChat(this.currentUser.id, this.uerId)
       .subscribe(
-        messages => {
-          this.messages = messages;
-        },
+        messages => { this.messages = [...messages]; },
         error => console.error('Error observable', error),
         () => console.log('mensaje recivido completado')
       )
   }
+  // Recibir un solo mensaje esta de pruebas
+  /* messageReceiver() {
+    this._service.mensajeRecivido()
+      .subscribe(
+        () => { message => this.messages.push(message) }
+        , error => console.error("Error obs recivir mensaje", error)
+        , () => console.log('completo'))
+  } */
   // Enviar mensaje
   send(message: string) {
     let grupo = 1;
